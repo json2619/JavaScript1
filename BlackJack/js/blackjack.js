@@ -47,17 +47,22 @@ function shuffleDeck() {
 }
 
 function initialTurn() {
+	game.playerCards.length = 0;
+	game.dealerCards.length = 0;
 	for (let i = 0; i < 2; i++) {
 		game.playerCards.push(game.deck.shift());
 		game.dealerCards.push(game.deck.shift());
 	}
+	game.dealerScore = getScore(game.dealerCards);
 }
 
 function getCardNumericValue(card) {
 	switch (card.value) {
 		case "A":
 			return 11;
-		case ("K", "Q", "J"):
+		case "K":
+		case "Q":
+		case "J":
 			return 10;
 		default:
 			return +card.value;
@@ -79,13 +84,21 @@ function getScore(cards) {
 	}
 }
 
+function getNextCard(cards) {
+	cards.push(game.deck.shift());
+}
+
 function playGame() {
 	createDeck();
 	shuffleDeck();
 	initialTurn();
-	console.log(game.deck);
 	console.log(game.playerCards);
 	console.log(game.dealerCards);
+	while (!(getScore(game.playerCards) > 21)) {
+		getNextCard(game.playerCards);
+		console.log(getScore(game.playerCards));
+	}
+	console.log(game.playerCards);
 }
 
 playGame();
