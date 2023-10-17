@@ -25,6 +25,35 @@ const game = {
 	deck: [],
 };
 
+function cardsToString(card) {
+	let str = "";
+	for (let i = 0; i < card.length; i++) {
+		str += card[i].suit + "-" + card[i].value + "; ";
+	}
+	return str;
+}
+
+function checkBlackJack(card) {
+	return getScore(card) === 21 ? true : false;
+}
+
+function isPlayerScoreUpperLimit() {
+	return game.playerScore >= 21;
+}
+
+function checkPlayerWinner() {
+	return game.playerScore <= 21 &&
+		(game.dealerScore > 21 || game.playerScore >= game.dealerScore)
+		? true
+		: false;
+}
+function checkDealerWinner() {
+	return game.dealerScore <= 21 &&
+		(game.playerScore > 21 || game.dealerScore >= game.playerScore)
+		? true
+		: false;
+}
+
 function createDeck() {
 	for (let suitIdx = 0; suitIdx < suits.length; suitIdx++) {
 		for (let valueIdx = 0; valueIdx < values.length; valueIdx++) {
@@ -95,11 +124,17 @@ function playDealer() {
 	while (
 		game.playerScore <= 21 &&
 		game.dealerScore < game.playerScore &&
-		game.dealerScore < 21
+		game.dealerScore <= 16
 	) {
 		getNextCard(game.dealerCards);
 		game.dealerScore = getScore(game.dealerCards);
+		console.log(game.dealerScore);
 	}
+}
+
+function playPlayer() {
+	getNextCard(game.playerCards);
+	game.playerScore = getScore(game.playerCards);
 }
 
 function playGame() {
@@ -120,6 +155,10 @@ function playGame() {
 	console.log("-------");
 	console.log(game.dealerCards);
 	console.log(game.dealerScore);
+
+	console.log("-------");
+	console.log(checkPlayerWinner());
+	console.log(checkDealerWinner());
 }
 
 playGame();
