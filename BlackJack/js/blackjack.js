@@ -69,12 +69,12 @@ function getCardNumericValue(card) {
 	}
 }
 
-function getScore(cards) {
+function getScore(card) {
 	let score = 0;
 	let hasAce = 0;
-	for (let i = 0; i < cards.length; i++) {
-		score += getCardNumericValue(cards[i]);
-		if (cards[i].value === "A") {
+	for (let i = 0; i < card.length; i++) {
+		score += getCardNumericValue(card[i]);
+		if (card[i].value === "A") {
 			hasAce++;
 		}
 	}
@@ -82,10 +82,24 @@ function getScore(cards) {
 		score -= 10;
 		hasAce--;
 	}
+
+	return score;
 }
 
-function getNextCard(cards) {
-	cards.push(game.deck.shift());
+function getNextCard(card) {
+	card.push(game.deck.shift());
+}
+
+function playDealer() {
+	game.dealerScore = getScore(game.dealerCards);
+	while (
+		game.playerScore <= 21 &&
+		game.dealerScore < game.playerScore &&
+		game.dealerScore < 21
+	) {
+		getNextCard(game.dealerCards);
+		game.dealerScore = getScore(game.dealerCards);
+	}
 }
 
 function playGame() {
@@ -94,11 +108,18 @@ function playGame() {
 	initialTurn();
 	console.log(game.playerCards);
 	console.log(game.dealerCards);
+
 	while (!(getScore(game.playerCards) > 21)) {
 		getNextCard(game.playerCards);
 		console.log(getScore(game.playerCards));
 	}
 	console.log(game.playerCards);
+
+	game.playerScore = 18;
+	playDealer();
+	console.log("-------");
+	console.log(game.dealerCards);
+	console.log(game.dealerScore);
 }
 
 playGame();
