@@ -23,13 +23,6 @@ function cleanGame() {
 	playerDOM.result.innerHTML = "";
 }
 
-newGameButton.addEventListener("click", function () {
-	playGame();
-	cleanGame();
-	showGameButtons();
-	showStatus();
-});
-
 function showGameButtons() {
 	newGameButton.classList.add("d-none");
 	playerButtons.classList.remove("d-none");
@@ -39,3 +32,39 @@ function hideGameButtons() {
 	newGameButton.classList.remove("d-none");
 	playerButtons.classList.add("d-none");
 }
+
+function showStatus() {
+	playerDOM.cards.innerHTML = cardsToString(game.playerCards);
+	playerDOM.score.innerHTML = getScore(game.playerCards);
+	dealerDOM.cards.innerHTML = cardsToString(game.dealerCards);
+	dealerDOM.score.innerHTML = getScore(game.dealerCards);
+}
+
+function showWinners() {
+	playerDOM.result.innerHTML = checkPlayerWinner() ? "Ganador" : "Perdedor";
+	dealerDOM.result.innerHTML = checkDealerWinner() ? "Ganador" : "Perdedor";
+}
+
+newGameButton.addEventListener("click", function () {
+	playGame();
+	cleanGame();
+	showGameButtons();
+	showStatus();
+});
+
+hitButton.addEventListener("click", function () {
+	playPlayer();
+	if (isPlayerScoreUpperLimit()) {
+		playDealer();
+		showWinners();
+		hideGameButtons();
+	}
+	showStatus();
+});
+
+stayButton.addEventListener("click", function () {
+	playDealer();
+	showStatus();
+	showWinners();
+	hideGameButtons();
+});
