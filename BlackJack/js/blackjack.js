@@ -54,14 +54,16 @@ function checkDealerWinner() {
 		: false;
 }
 
-function createDeck() {
-	for (let suitIdx = 0; suitIdx < suits.length; suitIdx++) {
-		for (let valueIdx = 0; valueIdx < values.length; valueIdx++) {
-			let card = {
-				suit: suits[suitIdx],
-				value: values[valueIdx],
-			};
-			game.deck.push(card);
+function createDeck(num) {
+	for (let i = 0; i < num; i++) {
+		for (let suitIdx = 0; suitIdx < suits.length; suitIdx++) {
+			for (let valueIdx = 0; valueIdx < values.length; valueIdx++) {
+				let card = {
+					suit: suits[suitIdx],
+					value: values[valueIdx],
+				};
+				game.deck.push(card);
+			}
 		}
 	}
 }
@@ -83,6 +85,7 @@ function initialTurn() {
 		game.dealerCards.push(game.deck.shift());
 	}
 	game.dealerScore = getScore(game.dealerCards);
+	game.playerScore = getScore(game.playerCards);
 }
 
 function getCardNumericValue(card) {
