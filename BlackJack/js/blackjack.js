@@ -82,7 +82,11 @@ function initialTurn() {
 	game.dealerCards.length = 0;
 	for (let i = 0; i < 2; i++) {
 		game.playerCards.push(game.deck.shift());
-		game.dealerCards.push(game.deck.shift());
+		if (i === 0) {
+			game.dealerCards.push(game.deck.shift());
+		} else {
+			game.dealerCards.push({ suit: "", value: "" });
+		}
 	}
 	game.dealerScore = getScore(game.dealerCards);
 	game.playerScore = getScore(game.playerCards);
@@ -119,6 +123,11 @@ function getScore(card) {
 }
 
 function getNextCard(card) {
+	if (game.deck.length < 15) {
+		game.deck.length = 0;
+		createDeck(4);
+		shuffleDeck();
+	}
 	card.push(game.deck.shift());
 }
 
@@ -141,11 +150,11 @@ function playPlayer() {
 }
 
 function playGame() {
-	createDeck();
+	createDeck(4);
 	shuffleDeck();
 	initialTurn();
 	console.log(game.playerCards);
-	console.log(game.dealerCards);
+	console.log(game.dealerCards[0]);
 
 	while (!(getScore(game.playerCards) > 21)) {
 		getNextCard(game.playerCards);
@@ -153,7 +162,6 @@ function playGame() {
 	}
 	console.log(game.playerCards);
 
-	game.playerScore = 18;
 	playDealer();
 	console.log("-------");
 	console.log(game.dealerCards);
